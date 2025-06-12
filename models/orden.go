@@ -6,5 +6,6 @@ type ProductoItem struct {
 }
 
 type CreateOrdenRequest struct {
+	Cliente   string         `json:"cliente"`
 	Productos []ProductoItem `json:"productos"`
 }

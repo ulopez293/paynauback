@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func JSONLoginSuccess(c *fiber.Ctx, token string) error {
+func JSONAuthSuccess(c *fiber.Ctx, token string) error {
 	return c.Status(fiber.StatusOK).JSON(models.AuthResponse{
 		Token: token,
 	})

@@ -10,3 +10,7 @@ import (
 func CreateOrdenService(ctx context.Context, req models.CreateOrdenRequest) (*db.OrdenModel, error) {
 	return repository.CreateOrdenConProductos(ctx, req)
 }
+
+func GetOrdenesService(ctx context.Context) ([]db.OrdenModel, error) {
+	return repository.ObtenerOrdenesConProductos(ctx)
+}

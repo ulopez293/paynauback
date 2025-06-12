@@ -12,5 +12,5 @@ func Auth(c *fiber.Ctx) error {
 	if err != nil {
 		return views.JSONAuthError(c, fiber.StatusBadRequest, "Error en autenticación", err.Error())
 	}
-	return views.JSONLoginSuccess(c, userTokenPair.Token)
+	return views.JSONAuthSuccess(c, userTokenPair.Token)
 }

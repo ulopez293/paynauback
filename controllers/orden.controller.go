@@ -21,3 +21,11 @@ func CreateOrden(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusCreated).JSON(order)
 }
+
+func GetOrdenes(c *fiber.Ctx) error {
+	ordenes, err := services.GetOrdenesService(c.Context())
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+	return c.JSON(ordenes)
+}

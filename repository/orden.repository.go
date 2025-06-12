@@ -13,11 +13,9 @@ import (
 
 func CreateOrdenConProductos(ctx context.Context, req models.CreateOrdenRequest) (*db.OrdenModel, error) {
 	client := prisma.GetPrisma()
-
 	// 1) Validar stock y calcular total antes de la transacción
 	var total float64
 	productosInfo := make(map[string]*db.ProductoModel)
-
 	for _, item := range req.Productos {
 		p, err := client.Producto.FindUnique(db.Producto.ID.Equals(item.ProductoID)).Exec(ctx)
 		if err != nil {
@@ -32,31 +30,26 @@ func CreateOrdenConProductos(ctx context.Context, req models.CreateOrdenRequest)
 		productosInfo[item.ProductoID] = p
 		total += float64(item.Cantidad) * p.Precio
 	}
-
 	// 2) Generar ID de orden
 	ordenID := uuid.NewString()
-
 	// 3) Construir todas las transacciones
 	var txns []db.PrismaTransaction
-
 	// Crear la orden (cabecera) con ID personalizado y total
 	createOrden := client.Orden.CreateOne(
+		db.Orden.Cliente.Set(req.Cliente),
 		db.Orden.Total.Set(total),
 		db.Orden.ID.Set(ordenID),
 	).Tx()
 	txns = append(txns, createOrden)
-
 	// Crear detalles y actualizar stock
 	for _, item := range req.Productos {
 		p := productosInfo[item.ProductoID]
-
 		// Reducir stock
 		txns = append(txns, client.Producto.FindUnique(
 			db.Producto.ID.Equals(item.ProductoID),
 		).Update(
 			db.Producto.Stock.Set(p.Stock-item.Cantidad),
 		).Tx())
-
 		// Crear detalle vinculado a la orden
 		txns = append(txns, client.OrdenProducto.CreateOne(
 			db.OrdenProducto.Cantidad.Set(item.Cantidad),
@@ -65,12 +58,10 @@ func CreateOrdenConProductos(ctx context.Context, req models.CreateOrdenRequest)
 			db.OrdenProducto.Producto.Link(db.Producto.ID.Equals(item.ProductoID)),
 		).Tx())
 	}
-
 	// 4) Ejecutar la transacción atómica
 	if err := client.Prisma.Transaction(txns...).Exec(ctx); err != nil {
 		return nil, err
 	}
-
 	// 5) Recuperar la orden completa con sus detalles y productos anidados
 	orden, err := client.Orden.FindUnique(
 		db.Orden.ID.Equals(ordenID),
@@ -80,6 +71,18 @@ func CreateOrdenConProductos(ctx context.Context, req models.CreateOrdenRequest)
 	if err != nil || orden == nil {
 		return nil, errors.New("no se pudo recuperar la orden creada")
 	}
-
 	return orden, nil
+}
+
+func ObtenerOrdenesConProductos(ctx context.Context) ([]db.OrdenModel, error) {
+	client := prisma.GetPrisma()
+	ordenes, err := client.Orden.FindMany().With(
+		db.Orden.Productos.Fetch().With(
+			db.OrdenProducto.Producto.Fetch(),
+		),
+	).Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return ordenes, nil
 }

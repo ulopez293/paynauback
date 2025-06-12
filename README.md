@@ -19,7 +19,7 @@ go run github.com/steebchen/prisma-client-go db push
 ### Abrir visor de BD con prisma
 
 ```bash
-npx prisma studios
+npx prisma studio
 ```
 
 ## Arrancar Proyecto dev con Air

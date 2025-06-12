@@ -19,6 +19,7 @@ model Producto {
 model Orden {
   id           String           @id @default(uuid())
   fecha        DateTime         @default(now())
+  cliente      String
   total        Float
   productos    OrdenProducto[]
 }
