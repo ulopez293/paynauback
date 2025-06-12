@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"sync"
 
 	"github.com/google/uuid"
 
@@ -11,7 +12,13 @@ import (
 	"paynau-backend/prisma/db"
 )
 
+var stockMutex sync.Mutex
+
 func CreateOrdenConProductos(ctx context.Context, req models.CreateOrdenRequest) (*db.OrdenModel, error) {
+	// lock en memoria para que solo una rutina (request) pueda validar y actualizar stock a la vez
+	stockMutex.Lock()
+	defer stockMutex.Unlock()
+
 	client := prisma.GetPrisma()
 	// 1) Validar stock y calcular total antes de la transacción
 	var total float64
