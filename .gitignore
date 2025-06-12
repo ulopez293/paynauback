@@ -1,0 +1,7 @@
+
+# Test binary, build cache
+tmp/
+
+# Environment variables
+.env
+

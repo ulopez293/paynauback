@@ -1,0 +1,38 @@
+generator db {
+  provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Producto {
+  id          String   @id @default(uuid())
+  nombre      String
+  descripcion String
+  precio      Float
+  stock       Int
+  ordenes     OrdenProducto[]
+}
+
+model Orden {
+  id           String           @id @default(uuid())
+  fecha        DateTime         @default(now())
+  total        Float
+  productos    OrdenProducto[]
+}
+
+model OrdenProducto {
+  id         String   @id @default(uuid())
+  ordenId    String
+  productoId String
+  cantidad   Int
+  total      Float
+
+  orden      Orden    @relation(fields: [ordenId], references: [id])
+  producto   Producto @relation(fields: [productoId], references: [id])
+
+  @@index([ordenId])
+  @@index([productoId])
+}
