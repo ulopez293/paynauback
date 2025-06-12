@@ -18,7 +18,9 @@ func CreateProducto(ctx context.Context, nombre, descripcion string, precio floa
 
 func GetProductos(ctx context.Context) ([]db.ProductoModel, error) {
 	client := prisma.GetPrisma()
-	return client.Producto.FindMany().Exec(ctx)
+	return client.Producto.FindMany(
+		db.Producto.Deleted.Equals(false), // solo los no eliminados
+	).Exec(ctx)
 }
 
 func GetProductoByID(ctx context.Context, id string) (*db.ProductoModel, error) {
@@ -44,6 +46,8 @@ func DeleteProducto(ctx context.Context, id string) error {
 	client := prisma.GetPrisma()
 	_, err := client.Producto.FindUnique(
 		db.Producto.ID.Equals(id),
-	).Delete().Exec(ctx)
+	).Update(
+		db.Producto.Deleted.Set(true),
+	).Exec(ctx)
 	return err
 }
