@@ -10,8 +10,7 @@ RUN go mod download
 
 COPY . .
 
-# Asegura que la variable DATABASE_URL esté definida para el `generate`
-ENV DATABASE_URL="mysql://root:HkQwtPxmrifezyMHwxTXBRBwdcsDNPAA@nozomi.proxy.rlwy.net:26283/railway"
+ENV DATABASE_URL="mysql://root:tu-password@tu-host:puerto/railway"
 
 RUN go run github.com/steebchen/prisma-client-go generate && \
     go build -o main .
