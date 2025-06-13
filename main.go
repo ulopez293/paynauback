@@ -27,7 +27,7 @@ func main() {
 	routes.Setup(app)
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "5000"
 	}
 
 	log.Fatal(app.Listen(":" + port))

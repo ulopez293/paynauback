@@ -30,6 +30,8 @@ air
 
 ## Docker alternativa
 
+Para ejecutar dockerfile renombrar de .Dockerfile a Dockerfile ya que railway toma la configuracion de este.
+
 ```
 docker build -t paynau-backend .
 docker run -p 5000:5000 paynau-backend
