@@ -1,6 +1,8 @@
 
 ## Commandos Prisma
 
+Se debe crear el .env por las dudas, aunque en este caso ya esta definida la ruta desde el dockerfile
+
 ### Generar Modelo Prisma
 
 ```bash
@@ -33,6 +35,11 @@ npx prisma studio
 ```
 air init
 air
+```
+
+## Ejecutar Test
+```bash
+go test ./... -v
 ```
 
 ## Docker alternativa
