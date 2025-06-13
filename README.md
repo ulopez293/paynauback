@@ -16,6 +16,13 @@ go run github.com/steebchen/prisma-client-go db pull
 ```bash
 go run github.com/steebchen/prisma-client-go db push
 ```
+### Migracion Prisma Client Go 
+```bash
+Actualmente, prisma-client-go no soporta migraciones formales como Prisma Migrate de Node.js.
+
+otro opcional
+usar npx prisma migrate dev --name init
+```
 ### Abrir visor de BD con prisma
 
 ```bash
