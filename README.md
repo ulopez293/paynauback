@@ -27,3 +27,10 @@ npx prisma studio
 air init
 air
 ```
+
+## Docker alternativa
+
+```
+docker build -t paynau-backend .
+docker run -p 5000:5000 paynau-backend
+```
