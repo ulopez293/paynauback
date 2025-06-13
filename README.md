@@ -6,12 +6,12 @@
 ```bash
 go run github.com/steebchen/prisma-client-go generate
 ```
-### Leer BD prisma
+### Leer BD con prisma
 
 ```bash
 go run github.com/steebchen/prisma-client-go db pull
 ```
-### Crear BD prisma
+### Sincronizar BD con prisma
 
 ```bash
 go run github.com/steebchen/prisma-client-go db push
@@ -19,7 +19,7 @@ go run github.com/steebchen/prisma-client-go db push
 ### Migracion Prisma Client Go 
 ```bash
 Actualmente, prisma-client-go no soporta migraciones formales como Prisma Migrate de Node.js.
-
+usar db pull , generate y db push
 otro opcional
 usar npx prisma migrate dev --name init
 ```
