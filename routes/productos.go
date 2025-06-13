@@ -11,7 +11,7 @@ func ProductoRoutes(app fiber.Router) {
 	products := app.Group("/products")
 
 	// GET /api/products
-	products.Get("/", controllers.GetProductos)
+	products.Get("/", middlewares.Protected, controllers.GetProductos)
 	// POST /api/products
 	products.Post("/", middlewares.Protected, controllers.CreateProducto)
 	// PUT /api/products/:id
